@@ -1,4 +1,5 @@
 // Create an 8x8 grid filled with empty cells
+console.log("JavaScript is working!")
 const createGrid = () => {
   const grid = [];
   for (let i = 0; i < 8; i++) {
