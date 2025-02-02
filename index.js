@@ -65,7 +65,29 @@ const placeSymbol = (grid, row, col, symbol) => {
   } else {
     console.log(`Cell at row ${row}, column ${col} is already occupied!`);
   }
-  printGrid(grid); // Reprint the grid
+  const printGrid = (grid) => {
+  const gridContainer = document.getElementById("grid");
+  gridContainer.innerHTML = ""; // Clear old grid
+
+  grid.forEach((row, rowIndex) => {
+    const rowDiv = document.createElement("div");
+    rowDiv.classList.add("row");
+
+    row.forEach((cell, colIndex) => {
+      const cellDiv = document.createElement("div");
+      cellDiv.classList.add("cell");
+      cellDiv.textContent = cell || "."; // Show 🥭, 🪰, or "."
+
+      // Allow clicking a cell to place a symbol
+      cellDiv.onclick = () => placeSymbol(grid, rowIndex, colIndex, "🥭");
+
+      rowDiv.appendChild(cellDiv);
+    });
+
+    gridContainer.appendChild(rowDiv);
+  });
+};
+
 };
 
 // Function to check the win condition
