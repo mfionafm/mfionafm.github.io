@@ -23,7 +23,7 @@ const renderGrid = (grid) => {
     row.forEach((cell, colIndex) => {
       const cellDiv = document.createElement("div");
       cellDiv.classList.add("cell");
-      cellDiv.textContent = cell || "."; // Show 🥭, 🪰, or "."
+      cellDiv.textContent = cell || " "; // Show 🥭, 🪰, or " "
 
       // Allow clicking a cell to cycle through symbols
       cellDiv.onclick = () => {
