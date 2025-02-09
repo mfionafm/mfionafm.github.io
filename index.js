@@ -25,9 +25,15 @@ const renderGrid = (grid) => {
       cellDiv.classList.add("cell");
       cellDiv.textContent = cell || "."; // Show 🥭, 🪰, or "."
 
-      // Allow clicking a cell to place a symbol
+      // Allow clicking a cell to place a mango
       cellDiv.onclick = () => {
         placeSymbol(grid, rowIndex, colIndex, "🥭");
+        renderGrid(grid); // Update the grid after placement
+      };
+
+      // Allow double-clicking a cell to place a fly
+      cellDiv.ondblclick = () => {
+        placeSymbol(grid, rowIndex, colIndex, "🪰");
         renderGrid(grid); // Update the grid after placement
       };
 
