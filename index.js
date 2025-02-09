@@ -23,9 +23,9 @@ const renderGrid = (grid) => {
     row.forEach((cell, colIndex) => {
       const cellDiv = document.createElement("div");
       cellDiv.classList.add("cell");
-      cellDiv.textContent = cell || " "; // Show 🥭, 🪰, or " "
+      cellDiv.textContent = cell || "."; // Show 🥭, 🪰, or "."
 
-      // Allow clicking a cell to cycle through symbols
+      // Allow clicking a cell to cycle symbols
       cellDiv.onclick = () => {
         cycleSymbol(grid, rowIndex, colIndex);
         renderGrid(grid); // Update the grid after placement
@@ -70,18 +70,32 @@ const isValidPlacement = (grid, row, col, symbol) => {
   return true; // Placement is valid
 };
 
-// Function to cycle through symbols in a cell
+// Function to cycle through symbols (mango -> fly -> blank)
 const cycleSymbol = (grid, row, col) => {
   const symbols = [null, "🥭", "🪰"];
-  const currentIndex = symbols.indexOf(grid[row][col]);
-  const nextIndex = (currentIndex + 1) % symbols.length;
-  grid[row][col] = symbols[nextIndex];
+  let currentIndex = symbols.indexOf(grid[row][col]);
+  let nextIndex = (currentIndex + 1) % symbols.length;
+  let nextSymbol = symbols[nextIndex];
+
+  if (nextSymbol === null || isValidPlacement(grid, row, col, nextSymbol)) {
+    grid[row][col] = nextSymbol;
+  } else {
+    console.log(`Invalid placement for ${nextSymbol} at row ${row}, column ${col}`);
+  }
 };
 
-// Function to reset the game
+// Function to reset the grid without reloading
 const reset = () => {
-  location.reload();
-}
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      grid[i][j] = null; // Clear the grid
+    }
+  }
+  renderGrid(grid); // Re-render the grid
+};
+
+// Attach reset function to the reset button
+document.getElementById("reset").onclick = reset;
 
 // Function to check the win condition
 const checkWinCondition = (grid) => {
