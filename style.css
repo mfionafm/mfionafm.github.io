@@ -1,0 +1,48 @@
+/* Import the Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300..900&display=swap');
+
+/* Apply the font to the whole page */
+body {
+    font-family: 'Rubik', sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+
+/* Grid styling */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(8, 50px);
+    grid-gap: 5px;
+    margin: 20px auto;
+    width: fit-content;
+}
+
+/* Individual grid cells */
+.cell {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+/* Reset button styling */
+button {
+    font-family: 'Rubik', sans-serif;
+    font-size: 18px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    border: none;
+    background-color: #ffcc00;
+    color: black;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #ffaa00;
+}
