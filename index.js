@@ -1,5 +1,6 @@
+console.log("JavaScript is working!");
+
 // Create an 8x8 grid filled with empty cells
-console.log("JavaScript is working!")
 const createGrid = () => {
   const grid = [];
   for (let i = 0; i < 8; i++) {
@@ -10,15 +11,34 @@ const createGrid = () => {
 
 const grid = createGrid();
 
-// Visualize the grid in the console
-const printGrid = (grid) => {
-  grid.forEach(row => {
-    const rowString = row.map(cell => (cell === null ? "." : cell)).join(" ");
-    console.log(rowString);
+// Function to visualize the grid in the DOM
+const renderGrid = (grid) => {
+  const gridContainer = document.getElementById("grid");
+  gridContainer.innerHTML = ""; // Clear old grid
+
+  grid.forEach((row, rowIndex) => {
+    const rowDiv = document.createElement("div");
+    rowDiv.classList.add("row");
+
+    row.forEach((cell, colIndex) => {
+      const cellDiv = document.createElement("div");
+      cellDiv.classList.add("cell");
+      cellDiv.textContent = cell || "."; // Show 🥭, 🪰, or "."
+
+      // Allow clicking a cell to place a symbol
+      cellDiv.onclick = () => {
+        placeSymbol(grid, rowIndex, colIndex, "🥭");
+        renderGrid(grid); // Update the grid after placement
+      };
+
+      rowDiv.appendChild(cellDiv);
+    });
+
+    gridContainer.appendChild(rowDiv);
   });
-  console.log("\n"); // Add a blank line for spacing
 };
 
+// Function to count symbols in a row or column
 const countSymbols = (grid, index, isRow, symbol) => {
   let count = 0;
   for (let i = 0; i < 8; i++) {
@@ -31,7 +51,7 @@ const countSymbols = (grid, index, isRow, symbol) => {
   return count;
 };
 
-// Update isValidPlacement to include Rule 2
+// Function to check if placement is valid
 const isValidPlacement = (grid, row, col, symbol) => {
   // Check Rule 1: No more than 2 adjacent symbols
   if (col > 1 && grid[row][col - 1] === symbol && grid[row][col - 2] === symbol) return false;
@@ -50,44 +70,19 @@ const isValidPlacement = (grid, row, col, symbol) => {
   return true; // Placement is valid
 };
 
-// Function to check if placement is valid
-
-
 // Function to place a symbol in the grid
 const placeSymbol = (grid, row, col, symbol) => {
   if (grid[row][col] === null) {
     if (isValidPlacement(grid, row, col, symbol)) {
       grid[row][col] = symbol; // Place the symbol
       console.log(`Placed ${symbol} at row ${row}, column ${col}`);
+      renderGrid(grid); // Update the UI
     } else {
       console.log(`Invalid placement for ${symbol} at row ${row}, column ${col}`);
     }
   } else {
     console.log(`Cell at row ${row}, column ${col} is already occupied!`);
   }
-  const printGrid = (grid) => {
-  const gridContainer = document.getElementById("grid");
-  gridContainer.innerHTML = ""; // Clear old grid
-
-  grid.forEach((row, rowIndex) => {
-    const rowDiv = document.createElement("div");
-    rowDiv.classList.add("row");
-
-    row.forEach((cell, colIndex) => {
-      const cellDiv = document.createElement("div");
-      cellDiv.classList.add("cell");
-      cellDiv.textContent = cell || "."; // Show 🥭, 🪰, or "."
-
-      // Allow clicking a cell to place a symbol
-      cellDiv.onclick = () => placeSymbol(grid, rowIndex, colIndex, "🥭");
-
-      rowDiv.appendChild(cellDiv);
-    });
-
-    gridContainer.appendChild(rowDiv);
-  });
-};
-
 };
 
 // Function to check the win condition
@@ -114,46 +109,5 @@ const checkWinCondition = (grid) => {
   return true; // Grid is filled and valid
 };
 
-
-
-// Test cases
-
-// Losing Test Grid
-const losingGrid = [
-  ["🥭", "🥭", "🪰", "🪰", "🥭", "🥭", "🪰", "🪰"],
-  ["🪰", "🪰", "🥭", "🥭", "🪰", "🪰", "🥭", "🥭"],
-  ["🥭", "🥭", "🪰", "🪰", "🥭", "🥭", "🪰", "🪰"],
-  ["🪰", "🪰", "🥭", "🥭", "🪰", "🪰", "🥭", "🪰"], // Row with too many flies
-  ["🥭", "🥭", "🪰", "🪰", "🥭", "🥭", "🪰", "🪰"],
-  ["🪰", "🪰", "🥭", "🥭", "🪰", "🪰", "🥭", "🥭"],
-  ["🥭", "🥭", "🪰", "🪰", "🥭", "🥭", "🪰", "🪰"],
-  ["🪰", "🪰", "🥭", "🥭", "🪰", "🪰", "🥭", "🥭"]
-];
-
-// Test the win condition
-printGrid(losingGrid); // Visualize the grid
-if (checkWinCondition(losingGrid)) {
-  console.log("Congratulations! You've completed the puzzle!");
-} else {
-  console.log("The puzzle is not yet complete.");
-}
-
-
-const winningGrid = [
-  ["🥭", "🥭", "🪰", "🪰", "🥭", "🥭", "🪰", "🪰"],
-  ["🪰", "🪰", "🥭", "🥭", "🪰", "🪰", "🥭", "🥭"],
-  ["🥭", "🥭", "🪰", "🪰", "🥭", "🥭", "🪰", "🪰"],
-  ["🪰", "🪰", "🥭", "🥭", "🪰", "🪰", "🥭", "🥭"],
-  ["🥭", "🥭", "🪰", "🪰", "🥭", "🥭", "🪰", "🪰"],
-  ["🪰", "🪰", "🥭", "🥭", "🪰", "🪰", "🥭", "🥭"],
-  ["🥭", "🥭", "🪰", "🪰", "🥭", "🥭", "🪰", "🪰"],
-  ["🪰", "🪰", "🥭", "🥭", "🪰", "🪰", "🥭", "🥭"]
-];
-
-// Test the win condition
-printGrid(winningGrid); // Visualize the grid
-if (checkWinCondition(winningGrid)) {
-  console.log("Congratulations! You've completed the puzzle!");
-} else {
-  console.log("The puzzle is not yet complete.");
-}
+// Initialize the grid when the page loads
+renderGrid(grid);
