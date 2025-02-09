@@ -17,7 +17,7 @@ const renderGrid = () => {
       cellDiv.textContent = cell || "";
 
       cellDiv.onclick = () => {
-        cycleSymbol(rowIndex, colIndex, cellDiv);
+        cycleSymbol(rowIndex, colIndex);
       };
 
       rowDiv.appendChild(cellDiv);
@@ -27,11 +27,10 @@ const renderGrid = () => {
   });
 };
 
-const countSymbols = (index, isRow, symbol) => 
-  grid.reduce((count, row, i) => count + (isRow ? row[index] === symbol : grid[i][index] === symbol), 0);
+const countSymbolsInRow = (row, symbol) => grid[row].filter(cell => cell === symbol).length;
+const countSymbolsInCol = (col, symbol) => grid.reduce((count, row) => count + (row[col] === symbol ? 1 : 0), 0);
 
 const isValidPlacement = (row, col, symbol) => {
-  if (grid[row][col] === symbol) return true;
   if (
     (col > 1 && grid[row][col - 1] === symbol && grid[row][col - 2] === symbol) ||
     (col < 7 && grid[row][col + 1] === symbol && grid[row][col + 2] === symbol) ||
@@ -42,25 +41,28 @@ const isValidPlacement = (row, col, symbol) => {
   ) {
     return false;
   }
-  return countSymbols(row, true, symbol) < 4 && countSymbols(col, false, symbol) < 4;
+  return countSymbolsInRow(row, symbol) < 4 && countSymbolsInCol(col, symbol) < 4;
 };
 
-const cycleSymbol = (row, col, cellDiv) => {
+const cycleSymbol = (row, col) => {
   const symbols = [null, "🥭", "🪰"];
   let currentIndex = symbols.indexOf(grid[row][col]);
   let nextIndex = (currentIndex + 1) % symbols.length;
   let nextSymbol = symbols[nextIndex];
-
-  if (nextSymbol !== null && !isValidPlacement(row, col, nextSymbol)) {
-    cellDiv.classList.add("invalid-move");
-    setTimeout(() => {
-      cellDiv.classList.remove("invalid-move");
-    }, 3000);
-    return;
-  }
+  let previousSymbol = grid[row][col];
 
   grid[row][col] = nextSymbol;
   renderGrid();
+
+  if (nextSymbol !== null && !isValidPlacement(row, col, nextSymbol)) {
+    let tempCell = document.getElementsByClassName("cell")[row * 8 + col];
+    tempCell.classList.add("invalid-move");
+    setTimeout(() => {
+      grid[row][col] = previousSymbol;
+      renderGrid();
+      document.getElementsByClassName("cell")[row * 8 + col].classList.remove("invalid-move");
+    }, 3000);
+  }
 };
 
 const reset = () => {
@@ -70,3 +72,17 @@ const reset = () => {
 
 document.getElementById("reset").onclick = reset;
 renderGrid();
+
+const runTests = () => {
+  grid = createGrid();
+  grid[0][0] = "🥭";
+  grid[0][1] = "🥭";
+  grid[0][2] = "🥭";
+  console.assert(countSymbolsInRow(0, "🥭") === 3, "Row 0 should have 3 mangoes");
+  console.assert(countSymbolsInCol(0, "🥭") === 1, "Col 0 should have 1 mango");
+  console.assert(isValidPlacement(0, 3, "🥭") === true, "Placement at (0,3) should be valid");
+  grid[0][3] = "🥭";
+  console.assert(isValidPlacement(0, 4, "🥭") === false, "Placement at (0,4) should be invalid");
+};
+
+runTests();
