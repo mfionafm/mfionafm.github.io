@@ -91,6 +91,11 @@ const placeSymbol = (grid, row, col, symbol) => {
   }
 };
 
+// Function to reset the game
+const reset = () => {
+  location.reload();
+}
+
 // Function to check the win condition
 const checkWinCondition = (grid) => {
   // Check if the grid is fully filled
