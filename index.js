@@ -25,15 +25,9 @@ const renderGrid = (grid) => {
       cellDiv.classList.add("cell");
       cellDiv.textContent = cell || "."; // Show 🥭, 🪰, or "."
 
-      // Allow clicking a cell to place a mango
+      // Allow clicking a cell to cycle through symbols
       cellDiv.onclick = () => {
-        placeSymbol(grid, rowIndex, colIndex, "🥭");
-        renderGrid(grid); // Update the grid after placement
-      };
-
-      // Allow double-clicking a cell to place a fly
-      cellDiv.ondblclick = () => {
-        placeSymbol(grid, rowIndex, colIndex, "🪰");
+        cycleSymbol(grid, rowIndex, colIndex);
         renderGrid(grid); // Update the grid after placement
       };
 
@@ -76,19 +70,12 @@ const isValidPlacement = (grid, row, col, symbol) => {
   return true; // Placement is valid
 };
 
-// Function to place a symbol in the grid
-const placeSymbol = (grid, row, col, symbol) => {
-  if (grid[row][col] === null) {
-    if (isValidPlacement(grid, row, col, symbol)) {
-      grid[row][col] = symbol; // Place the symbol
-      console.log(`Placed ${symbol} at row ${row}, column ${col}`);
-      renderGrid(grid); // Update the UI
-    } else {
-      console.log(`Invalid placement for ${symbol} at row ${row}, column ${col}`);
-    }
-  } else {
-    console.log(`Cell at row ${row}, column ${col} is already occupied!`);
-  }
+// Function to cycle through symbols in a cell
+const cycleSymbol = (grid, row, col) => {
+  const symbols = [null, "🥭", "🪰"];
+  const currentIndex = symbols.indexOf(grid[row][col]);
+  const nextIndex = (currentIndex + 1) % symbols.length;
+  grid[row][col] = symbols[nextIndex];
 };
 
 // Function to reset the game
