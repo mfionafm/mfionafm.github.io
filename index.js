@@ -51,7 +51,7 @@ const isValidPlacement = (row, col, symbol) => {
 };
 
 // Function to cycle through symbols while ensuring valid moves
-const cycleSymbol = (row, col, cellDiv) => {
+const cycleSymbol = (row, col) => {
   const symbols = [null, "🥭", "🪰"];
   let currentIndex = symbols.indexOf(grid[row][col]);
   let attempts = 0;
