@@ -6,15 +6,17 @@ body {
     font-family: 'Rubik', sans-serif;
     text-align: center;
     margin: 20px;
+    background-color: #f8f8f8;
 }
 
-/* Grid styling */
+/* Grid container */
 .grid {
     display: grid;
     grid-template-columns: repeat(8, 50px);
-    grid-gap: 5px;
+    grid-gap: 0; /* Remove gaps for a tighter look */
     margin: 20px auto;
     width: fit-content;
+    border: 2px solid black; /* Outer border for the grid */
 }
 
 /* Individual grid cells */
@@ -25,8 +27,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid black;
-    cursor: pointer;
+    border: 1px solid black; /* Add borders to each cell */
+    background-color: white;
+    transition: background 0.3s ease;
+}
+
+/* Optional: Highlight cell when hovered */
+.cell:hover {
+    background-color: #ffeb99;
 }
 
 /* Reset button styling */
