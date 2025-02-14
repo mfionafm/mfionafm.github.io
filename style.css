@@ -16,7 +16,7 @@ body {
     grid-gap: 0; /* Remove gaps for a tighter look */
     margin: 20px auto;
     width: fit-content;
-    border: 2px solid black; /* Outer border for the grid */
+    border: 3px solid black; /* Outer border for the grid */
 }
 
 /* Individual grid cells */
