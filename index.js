@@ -23,7 +23,6 @@ const renderGrid = () => {
 
       cellDiv.onclick = () => {
         cycleSymbol(rowIndex, colIndex, cellDiv);
-        renderGrid();
       };
 
       rowDiv.appendChild(cellDiv);
@@ -40,8 +39,6 @@ const countSymbols = (index, isRow, symbol) => {
 
 // Function to check if placement is valid
 const isValidPlacement = (row, col, symbol) => {
-  if (grid[row][col] === symbol) return true;
-  
   if (
     (col > 1 && grid[row][col - 1] === symbol && grid[row][col - 2] === symbol) ||
     (col < 7 && grid[row][col + 1] === symbol && grid[row][col + 2] === symbol) ||
@@ -52,29 +49,24 @@ const isValidPlacement = (row, col, symbol) => {
   ) {
     return false;
   }
-
   return countSymbols(row, true, symbol) < 4 && countSymbols(col, false, symbol) < 4;
 };
 
-// Function to cycle through symbols with a delay for invalid moves
+// Function to cycle through symbols with validation
 const cycleSymbol = (row, col, cellDiv) => {
   const symbols = [null, "🥭", "🪰"];
   let currentIndex = symbols.indexOf(grid[row][col]);
   let nextIndex = (currentIndex + 1) % symbols.length;
   let nextSymbol = symbols[nextIndex];
 
-  grid[row][col] = nextSymbol;
-  renderGrid();
-
-  if (nextSymbol !== null && !isValidPlacement(row, col, nextSymbol)) {
+  if (nextSymbol === null || isValidPlacement(row, col, nextSymbol)) {
+    grid[row][col] = nextSymbol;
+    renderGrid();
+  } else {
+    cellDiv.classList.add("invalid-move");
     setTimeout(() => {
-      cellDiv.classList.add("invalid-move");
-    }, 2500);
-    setTimeout(() => {
-      grid[row][col] = null;
       cellDiv.classList.remove("invalid-move");
-      renderGrid();
-    }, 3000);
+    }, 1000);
   }
 };
 
