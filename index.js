@@ -1,5 +1,3 @@
-console.log("JavaScript is working!");
-
 // Create an 8x8 grid filled with empty cells
 const createGrid = () => {
   return Array.from({ length: 8 }, () => Array(8).fill(null));
