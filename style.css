@@ -13,10 +13,9 @@ body {
 .grid {
     display: grid;
     grid-template-columns: repeat(8, 50px);
-    grid-gap: 0; /* Remove gaps for a tighter look */
     margin: 20px auto;
     width: fit-content;
-    border: 2px solid black; /* Outer border for the grid */
+    border: 5px solid black; /* Slightly thicker outer border */
     box-sizing: border-box;
 }
 
@@ -28,28 +27,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid black; /* Add borders to each cell */
     background-color: white;
     transition: background 0.3s ease;
     box-sizing: border-box;
-}
-
-/* Ensure the last column cells do not add extra border on the right */
-.cell:nth-child(8n) {
-    border-right: 2px solid black;
-}
-
-/* Ensure the last row cells do not add extra border on the bottom */
-.cell:nth-last-child(-n+8) {
-    border-bottom: 2px solid black;
-}
-
-/* Optional: Highlight cell when hovered */
-.cell:hover {
-    background-color: #ffeb99;
-}
-}
-
+    border: 1px solid black; /* Apply uniform inner borders */
 /* Reset button styling */
 button {
     font-family: 'Rubik', sans-serif;
