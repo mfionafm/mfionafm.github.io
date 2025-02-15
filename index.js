@@ -1,3 +1,5 @@
+console.log("JavaScript is working!");
+
 // Create an 8x8 grid filled with empty cells
 const createGrid = () => {
   return Array.from({ length: 8 }, () => Array(8).fill(null));
@@ -39,10 +41,10 @@ const countSymbols = (index, isRow, symbol) => {
 const isValidPlacement = (row, col, symbol) => {
   if (
     (col > 1 && grid[row][col - 1] === symbol && grid[row][col - 2] === symbol) ||
-    (col < 7 && grid[row][col + 1] === symbol && grid[row][col + 2] === symbol) ||
+    (col < 6 && grid[row][col + 1] === symbol && grid[row][col + 2] === symbol) ||
     (col > 0 && col < 7 && grid[row][col - 1] === symbol && grid[row][col + 1] === symbol) ||
     (row > 1 && grid[row - 1][col] === symbol && grid[row - 2][col] === symbol) ||
-    (row < 7 && grid[row + 1][col] === symbol && grid[row + 2][col] === symbol) ||
+    (row < 6 && grid[row + 1][col] === symbol && grid[row + 2][col] === symbol) ||
     (row > 0 && row < 7 && grid[row - 1][col] === symbol && grid[row + 1][col] === symbol)
   ) {
     return false;
@@ -50,19 +52,22 @@ const isValidPlacement = (row, col, symbol) => {
   return countSymbols(row, true, symbol) < 4 && countSymbols(col, false, symbol) < 4;
 };
 
-// Function to cycle through symbols while ensuring valid moves
-const cycleSymbol = (row, col) => {
+// Function to cycle through symbols with validation
+const cycleSymbol = (row, col, cellDiv) => {
   const symbols = [null, "🥭", "🪰"];
   let currentIndex = symbols.indexOf(grid[row][col]);
-  let attempts = 0;
+  let nextIndex = (currentIndex + 1) % symbols.length;
+  let nextSymbol = symbols[nextIndex];
 
-  do {
-    currentIndex = (currentIndex + 1) % symbols.length;
-    attempts++;
-  } while (attempts < symbols.length && symbols[currentIndex] !== null && !isValidPlacement(row, col, symbols[currentIndex]));
-
-  grid[row][col] = symbols[currentIndex];
-  renderGrid();
+  if (nextSymbol === null || isValidPlacement(row, col, nextSymbol)) {
+    grid[row][col] = nextSymbol;
+    renderGrid();
+  } else {
+    cellDiv.classList.add("invalid-move");
+    setTimeout(() => {
+      cellDiv.classList.remove("invalid-move");
+    }, 1000);
+  }
 };
 
 // Function to reset the grid
