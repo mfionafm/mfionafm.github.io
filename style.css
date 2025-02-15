@@ -7,23 +7,25 @@ body {
     text-align: center;
     margin: 20px;
     background-color: #f8f8f8;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 /* Grid container */
 .grid {
     display: grid;
-    grid-template-columns: repeat(8, 50px);
+    grid-template-columns: repeat(8, minmax(40px, 1fr)); /* Make columns flexible */
     margin: 20px auto;
-    width: fit-content;
+    width: 90vw; /* Responsive width */
+    max-width: 400px; /* Prevent excessive stretching */
     border: 5px solid black; /* Slightly thicker outer border */
     box-sizing: border-box;
 }
 
 /* Individual grid cells */
 .cell {
-    width: 50px;
-    height: 50px;
-    font-size: 24px;
+    width: 100%; /* Adjust width dynamically */
+    aspect-ratio: 1 / 1; /* Maintain square shape */
+    font-size: clamp(16px, 5vw, 24px); /* Responsive font size */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -31,6 +33,13 @@ body {
     transition: background 0.3s ease;
     box-sizing: border-box;
     border: 1px solid black; /* Apply uniform inner borders */
+}
+
+/* Optional: Highlight cell when hovered */
+.cell:hover {
+    background-color: #ffeb99;
+}
+
 /* Reset button styling */
 button {
     font-family: 'Rubik', sans-serif;
