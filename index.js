@@ -56,18 +56,22 @@ const isValidPlacement = (row, col, symbol) => {
 const cycleSymbol = (row, col, cellDiv) => {
   const symbols = [null, "🥭", "🪰"];
   let currentIndex = symbols.indexOf(grid[row][col]);
-  let nextIndex = (currentIndex + 1) % symbols.length;
-  let nextSymbol = symbols[nextIndex];
-
-  if (nextSymbol === null || isValidPlacement(row, col, nextSymbol)) {
-    grid[row][col] = nextSymbol;
-    renderGrid();
-  } else {
-    cellDiv.classList.add("invalid-move");
-    setTimeout(() => {
-      cellDiv.classList.remove("invalid-move");
-    }, 1000);
+  
+  for (let i = 1; i < symbols.length; i++) {
+    let nextIndex = (currentIndex + i) % symbols.length;
+    let nextSymbol = symbols[nextIndex];
+    
+    if (nextSymbol === null || isValidPlacement(row, col, nextSymbol)) {
+      grid[row][col] = nextSymbol;
+      renderGrid();
+      return;
+    }
   }
+
+  cellDiv.classList.add("invalid-move");
+  setTimeout(() => {
+    cellDiv.classList.remove("invalid-move");
+  }, 1000);
 };
 
 // Function to reset the grid
