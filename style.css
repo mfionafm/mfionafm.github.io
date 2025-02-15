@@ -10,6 +10,49 @@ body {
     overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
+/* Info button container */
+.info-container {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+/* Info button */
+.info-button {
+    font-size: 24px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: #333;
+}
+
+/* Info box styling */
+.info-box {
+    display: none;
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 250px;
+    background: white;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    text-align: left;
+    font-size: 14px;
+}
+
+/* Show the info box on hover (PC) */
+.info-container:hover .info-box {
+    display: block;
+}
+
+/* Show the info box on tap (Mobile) */
+.info-button:active + .info-box {
+    display: block;
+}
+
 /* Grid container */
 .grid {
     display: grid;
