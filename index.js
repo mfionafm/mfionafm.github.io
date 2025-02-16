@@ -1,43 +1,33 @@
 console.log("JavaScript is working!");
 
 // Create an 8x8 grid filled with empty cells
-const createGrid = () => {
-  return Array.from({ length: 8 }, () => Array(8).fill(null));
-};
+const createGrid = () => Array.from({ length: 8 }, () => Array(8).fill(null));
 
 let grid = createGrid();
 
-// Function to visualize the grid in the DOM
+// Render grid to the DOM
 const renderGrid = () => {
   const gridContainer = document.getElementById("grid");
   gridContainer.innerHTML = "";
-
   grid.forEach((row, rowIndex) => {
     const rowDiv = document.createElement("div");
     rowDiv.classList.add("row");
-
     row.forEach((cell, colIndex) => {
       const cellDiv = document.createElement("div");
       cellDiv.classList.add("cell");
       cellDiv.textContent = cell || "";
-
-      cellDiv.onclick = () => {
-        cycleSymbol(rowIndex, colIndex, cellDiv);
-      };
-
+      cellDiv.onclick = () => { cycleSymbol(rowIndex, colIndex, cellDiv); };
       rowDiv.appendChild(cellDiv);
     });
-
     gridContainer.appendChild(rowDiv);
   });
 };
 
-// Function to count symbols in a row or column
-const countSymbols = (index, isRow, symbol) => {
-  return grid.reduce((count, row, i) => count + (isRow ? row[index] === symbol : grid[i][index] === symbol), 0);
-};
+// Count symbols in a row/column
+const countSymbolsInRow = (rowIndex, symbol) => grid[rowIndex].filter(cell => cell === symbol).length;
+const countSymbolsInCol = (colIndex, symbol) => grid.reduce((count, row) => count + (row[colIndex] === symbol ? 1 : 0), 0);
 
-// Function to check if placement is valid
+// Validate placement: no more than 2 adjacent and total count less than 4
 const isValidPlacement = (row, col, symbol) => {
   if (
     (col > 1 && grid[row][col - 1] === symbol && grid[row][col - 2] === symbol) ||
@@ -49,32 +39,26 @@ const isValidPlacement = (row, col, symbol) => {
   ) {
     return false;
   }
-  return countSymbols(row, true, symbol) < 4 && countSymbols(col, false, symbol) < 4;
+  return countSymbolsInRow(row, symbol) < 4 && countSymbolsInCol(col, symbol) < 4;
 };
 
-// Function to cycle through symbols with validation
+// Cycle through symbols until a valid move is found or all options are exhausted
 const cycleSymbol = (row, col, cellDiv) => {
   const symbols = [null, "🥭", "🪰"];
   let currentIndex = symbols.indexOf(grid[row][col]);
-  
-  for (let i = 1; i < symbols.length; i++) {
+  for (let i = 1; i <= symbols.length; i++) {
     let nextIndex = (currentIndex + i) % symbols.length;
     let nextSymbol = symbols[nextIndex];
-    
     if (nextSymbol === null || isValidPlacement(row, col, nextSymbol)) {
       grid[row][col] = nextSymbol;
       renderGrid();
       return;
     }
   }
-
   cellDiv.classList.add("invalid-move");
-  setTimeout(() => {
-    cellDiv.classList.remove("invalid-move");
-  }, 1000);
+  setTimeout(() => { cellDiv.classList.remove("invalid-move"); }, 1000);
 };
 
-// Function to reset the grid
 const reset = () => {
   grid = createGrid();
   renderGrid();
@@ -82,17 +66,13 @@ const reset = () => {
 
 document.getElementById("reset").onclick = reset;
 
-// Function to check the win condition
 const checkWinCondition = () => {
   if (grid.flat().includes(null)) return false;
-  
   for (let i = 0; i < 8; i++) {
-    if (countSymbols(i, true, "🥭") !== 4 || countSymbols(i, true, "🪰") !== 4 || countSymbols(i, false, "🥭") !== 4 || countSymbols(i, false, "🪰") !== 4) {
-      return false;
-    }
+    if (countSymbolsInRow(i, "🥭") !== 4 || countSymbolsInRow(i, "🪰") !== 4) return false;
+    if (countSymbolsInCol(i, "🥭") !== 4 || countSymbolsInCol(i, "🪰") !== 4) return false;
   }
   return true;
 };
 
-// Initialize the grid when the page loads
 renderGrid();
